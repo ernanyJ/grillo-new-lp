@@ -45,10 +45,11 @@ export const site = {
 
   /** Números públicos da Workana, como estão no site atual. */
   workana: {
+    /** Foi em MENOS de 5 meses — a copy sempre diz "menos de". */
     mesesHero: 5,
     topPrimeiroAno: 100,
     topBrasil: 10,
-    avaliacoes: 40,
+    avaliacoes: 50,
     recorrentes: 10,
   },
 

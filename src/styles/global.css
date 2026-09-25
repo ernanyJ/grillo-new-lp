@@ -442,20 +442,18 @@
   }
 }
 
-/* "Não somos": a linha risca cada item depois que o cartão entra. */
-.riscar::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  top: 55%;
-  height: 1.5px;
-  background: var(--color-nao);
-  transform-origin: left;
-  transition: transform 0.7s var(--ease-suave);
+/* "Não somos": a linha risca cada item depois que o cartão entra. É um
+   fundo de elemento inline com `box-decoration-break: clone` — com o texto
+   quebrado em duas linhas, cada linha recebe o próprio risco. */
+.riscar {
+  background: linear-gradient(var(--color-nao), var(--color-nao)) no-repeat 0 58% / 100% 1.5px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size 0.9s var(--ease-suave);
   transition-delay: calc(var(--i, 0) * 220ms + 500ms);
 }
-.revelacao [data-reveal]:not(.revelado) .riscar::after {
-  transform: scaleX(0);
+.revelacao [data-reveal]:not(.revelado) .riscar {
+  background-size: 0% 1.5px;
 }
 
 /* Barra de progresso de leitura no topo. */

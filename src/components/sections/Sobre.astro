@@ -13,7 +13,8 @@ import { sobre, cta } from "@/data/landing";
  * percorre os elos em sequência.
  */
 const papeis = sobre.papeis;
-const somos = sobre.naoSomos.split(" Somos ")[1] ?? sobre.naoSomos;
+const resto = sobre.naoSomos.split(" Somos ")[1] ?? sobre.naoSomos;
+const somos = resto.charAt(0).toUpperCase() + resto.slice(1);
 ---
 
 <Section id="sobre" tone="fundo-2" filetes>
@@ -68,11 +69,8 @@ const somos = sobre.naoSomos.split(" Somos ")[1] ?? sobre.naoSomos;
               <span class="grid size-7 shrink-0 place-items-center rounded-full border border-nao/40 text-nao">
                 <Icone name="x" class="size-3.5" espessura={2.5} />
               </span>
-              <span
-                class="riscar relative"
-                style={`--i:${i}`}
-              >
-                {item}
+              <span>
+                <span class="riscar" style={`--i:${i}`}>{item}</span>
               </span>
             </li>
           ))

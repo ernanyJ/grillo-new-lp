@@ -46,7 +46,7 @@ export const hero = {
 
 export const manifesto = {
   rotulo: "Manifesto",
-  title: "Menos barulho. Mais infraestrutura.",
+  title: "Menos ruído. Mais infraestrutura.",
   destaque: "Mais infraestrutura.",
   paragrafo:
     "O mercado está cheio de ferramentas, templates, promessas rápidas, automações genéricas e conteúdos produzidos em escala. Mas crescimento real não nasce do excesso. Nasce de clareza.",
@@ -519,7 +519,7 @@ export const provas = {
     "A Grillo construiu autoridade por meio de projetos reais, clientes recorrentes e crescimento acelerado em uma das maiores plataformas de trabalho independente.",
   numeros: [
     {
-      prefixo: "",
+      prefixo: "Menos de",
       valor: site.workana.mesesHero,
       sufixo: " meses",
       label: "Para atingir o nível Hero na Workana.",
@@ -549,7 +549,8 @@ export const provas = {
     {
       prefixo: "",
       valor: site.workana.recorrentes,
-      sufixo: " clientes recorrentes",
+      sufixo: "+",
+      unidade: "clientes recorrentes",
       label: "Contrataram a Grillo mais de uma vez, prova de relação contínua e confiança.",
       tag: "Recorrência",
     },

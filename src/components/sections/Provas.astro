@@ -32,7 +32,8 @@ const [destaque, ...demais] = provas.numeros;
         <circle cx="100" cy="100" r="70" stroke="rgb(147 191 191 / 0.2)" stroke-dasharray="40 12" />
       </svg>
       <p class="relative rotulo text-ambar-claro">{destaque.tag}</p>
-      <p class="relative mt-10 numero text-[7rem] text-creme sm:text-[9rem]">
+      <p class="relative mt-10 titulo text-[2.2rem] text-ambar-claro sm:text-[2.6rem]">{destaque.prefixo}</p>
+      <p class="relative numero text-[7rem] text-creme sm:text-[9rem]">
         <span data-contar={destaque.valor}>{destaque.valor}</span><span class="titulo-destaque text-[0.45em]">{destaque.sufixo}</span>
       </p>
       <p class="relative mt-4 max-w-[26ch] font-texto text-lg leading-snug text-creme-2">{destaque.label}</p>
@@ -50,9 +51,8 @@ const [destaque, ...demais] = provas.numeros;
             <p class="mt-6 numero text-[4.2rem] text-creme sm:text-[5rem]">
               {n.prefixo && <span class="text-[0.55em] text-ambar">{n.prefixo}</span>}
               <span data-contar={n.valor}>{n.valor}</span>
-              {n.sufixo && (n.sufixo.length > 3
-                ? <span class="mt-1 block text-[0.42em] text-ambar">{n.sufixo.trim()}</span>
-                : <span class="text-[0.7em] text-ambar">{n.sufixo}</span>)}
+              {n.sufixo && <span class="text-[0.7em] text-ambar">{n.sufixo}</span>}
+              {"unidade" in n && <span class="mt-1 block text-[0.42em] text-ambar">{n.unidade}</span>}
             </p>
             <p class="mt-3 font-texto text-[0.9375rem] leading-snug text-fosco">{n.label}</p>
             <span aria-hidden="true" class="absolute right-6 bottom-6 h-px w-10 origin-right scale-x-50 bg-ambar transition-transform duration-500 group-hover:scale-x-150" />
