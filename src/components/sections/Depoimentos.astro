@@ -1,0 +1,59 @@
+---
+import Section from "@/components/ui/Section.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Button from "@/components/ui/Button.astro";
+import Icone from "@/components/ui/Icone.astro";
+import { depoimentos, cta } from "@/data/landing";
+
+/**
+ * Depoimentos em duas faixas de cartões correndo em sentidos opostos. Pausa
+ * no hover. A segunda cópia de cada faixa é `aria-hidden`.
+ */
+const meio = Math.ceil(depoimentos.items.length / 2);
+const faixas = [depoimentos.items.slice(0, meio), depoimentos.items.slice(meio)];
+---
+
+<Section id="depoimentos" tone="fundo">
+  <SectionHeading
+    rotulo={depoimentos.rotulo}
+    title={depoimentos.title}
+    destaque={depoimentos.destaque}
+    subtitle={depoimentos.subtitle}
+  />
+
+  <div data-reveal="foco" class="relative left-1/2 mt-14 grid w-screen -translate-x-1/2 gap-5">
+    {
+      faixas.map((lista, f) => (
+        <div class="faixa overflow-hidden">
+          <div class:list={["faixa-trilho", f === 1 && "reverso"]} style={`--dur: ${70 + f * 10}s`}>
+            {[0, 1].map((copia) => (
+              <ul class="flex shrink-0 items-stretch gap-5 pr-5" aria-hidden={copia === 1 ? "true" : undefined}>
+                {lista.map((d) => (
+                  <li class="w-[20rem] shrink-0 sm:w-[26rem]">
+                    <figure class="holofote flex h-full flex-col rounded-bloco border border-linha bg-card p-7 transition-colors duration-500 hover:border-ambar-fundo/60">
+                      <div class="flex items-center justify-between">
+                        <span class="flex text-ambar" aria-label="5 estrelas">
+                          {[0, 1, 2, 3, 4].map(() => <Icone name="estrela" class="size-4" />)}
+                        </span>
+                        <Icone name="aspas" class="size-8 text-floresta" />
+                      </div>
+                      <blockquote class="mt-5 flex-1 font-texto text-[0.9875rem] leading-relaxed text-creme-2">
+                        “{d.text}”
+                      </blockquote>
+                      <figcaption class="mt-6 border-t border-linha pt-4 rotulo text-[0.62rem] text-fosco">{d.autor}</figcaption>
+                    </figure>
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <div data-reveal class="mt-14 flex flex-col items-center gap-5 text-center">
+    <p class="font-texto text-lg font-semibold text-creme-2">{depoimentos.chamada}</p>
+    <Button posicao="depoimentos">{cta.falar}</Button>
+  </div>
+</Section>

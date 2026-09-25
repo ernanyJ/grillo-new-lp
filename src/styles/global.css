@@ -1,0 +1,520 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   GRILLO · HUB CRIATIVO ESTRATÉGICO
+   Mesmo sistema da `dozero-lp` (campo escuro contínuo, Bebas + Plus
+   Jakarta, cartões com borda e elevação), com a paleta da marca Grillo:
+   floresta, âmbar e teal.
+
+   Diferente das LPs de produto, esta página é pedida em movimento: o
+   símbolo gira, anéis orbitam, faixas correm, números contam, cartões
+   reagem ao cursor. Toda animação contínua é decorativa, nunca carrega
+   informação, e `prefers-reduced-motion` desliga tudo.
+---------------------------------------------------------------- */
+@theme {
+  --color-*: initial;
+
+  /* Campo escuro — floresta profunda */
+  --color-fundo: #04110b; /* base da página */
+  --color-fundo-2: #071a11; /* seção vizinha que precisa se separar */
+  --color-fundo-3: #0a2519; /* faixa elevada: cabeçalho, barra */
+  --color-floresta: #143d29; /* verde da marca */
+  --color-preto: #020906; /* só o rodapé */
+
+  /* Cartões */
+  --color-card: #0a1f15;
+  --color-card-2: #0f2a1d;
+
+  /* Filetes */
+  --color-linha: #163024;
+  --color-linha-2: #21402f;
+
+  /* Acento — âmbar Grillo */
+  --color-ambar: #f6a200;
+  --color-ambar-claro: #fbd06b; /* topo do gradiente, hover, texto vivo */
+  --color-ambar-fundo: #c98500; /* borda e base do gradiente */
+  --color-sobre-ambar: #0a0806; /* texto sobre o âmbar */
+
+  /* Apoio — teal Grillo: brilho frio, linhas de sistema, órbitas */
+  --color-teal: #4e9696;
+  --color-teal-claro: #93bfbf;
+
+  /* Texto — nunca branco puro */
+  --color-creme: #f3f1ea;
+  --color-creme-2: #cfd6cf;
+  --color-fosco: #93a79b;
+  --color-fosco-2: #6f857a;
+
+  --color-whatsapp: #25d366;
+  --color-nao: #e08a8a;
+
+  --font-titulo: "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
+  --font-texto: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-fio: 10px;
+  --radius-caixa: 16px;
+  --radius-bloco: 24px;
+
+  --shadow-baixa: 0 4px 10px -4px rgb(0 0 0 / 0.7);
+  --shadow-media: 0 10px 24px -8px rgb(0 0 0 / 0.8), 0 2px 5px rgb(0 0 0 / 0.45);
+  --shadow-alta: 0 16px 32px -10px rgb(0 0 0 / 0.85), 0 3px 8px rgb(0 0 0 / 0.5);
+  --shadow-ambar: 0 0 32px rgb(246 162 0 / 0.35), 0 0 8px rgb(248 185 47 / 0.45);
+
+  --ease-suave: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-mola: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------------------------------------------------------------
+   Utilitários do sistema
+---------------------------------------------------------------- */
+
+@utility rotulo {
+  font-family: var(--font-texto);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* Bebas Neue: a copy fica em caixa normal, a fonte é que é caixa-alta. */
+@utility titulo {
+  font-family: var(--font-titulo);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.012em;
+  text-wrap: balance;
+}
+
+@utility titulo-destaque {
+  font-style: normal;
+  background: linear-gradient(
+    180deg,
+    var(--color-ambar-claro),
+    var(--color-ambar) 60%,
+    var(--color-ambar-fundo)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility texto {
+  font-family: var(--font-texto);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.65;
+  max-width: 62ch;
+}
+
+@utility numero {
+  font-family: var(--font-titulo);
+  font-weight: 400;
+  line-height: 0.85;
+  letter-spacing: 0.01em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+@utility filete {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-linha-2), transparent);
+}
+
+/* Grade técnica de fundo — o "sistema" desenhado atrás do conteúdo. */
+@utility grade {
+  background-image:
+    linear-gradient(to right, rgb(147 191 191 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(147 191 191 / 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+}
+
+/* ---------------------------------------------------------------
+   Base
+---------------------------------------------------------------- */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-fundo font-texto text-creme antialiased;
+    overflow-x: hidden;
+  }
+
+  :target,
+  [id] {
+    scroll-margin-top: 5rem;
+  }
+
+  ::selection {
+    background: var(--color-ambar);
+    color: var(--color-sobre-ambar);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ambar);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Movimento — entrada
+
+   `revelacao` só é posta no <html> pelo script: sem ele, nada fica oculto.
+   `data-reveal` aceita o tipo de entrada; `--i` escalona filhos.
+---------------------------------------------------------------- */
+
+.revelacao [data-reveal] {
+  opacity: 0;
+  transition:
+    opacity 0.8s var(--ease-suave),
+    transform 0.9s var(--ease-suave),
+    filter 0.9s var(--ease-suave);
+  transition-delay: calc(var(--i, 0) * 80ms + var(--atraso, 0ms));
+}
+
+.revelacao [data-reveal=""],
+.revelacao [data-reveal="subir"] {
+  transform: translateY(32px);
+}
+.revelacao [data-reveal="esquerda"] {
+  transform: translateX(-48px);
+}
+.revelacao [data-reveal="direita"] {
+  transform: translateX(48px);
+}
+.revelacao [data-reveal="escala"] {
+  transform: scale(0.88);
+}
+.revelacao [data-reveal="foco"] {
+  transform: translateY(16px) scale(0.98);
+  filter: blur(10px);
+}
+.revelacao [data-reveal="girar"] {
+  transform: rotate(-12deg) scale(0.8);
+}
+
+.revelacao [data-reveal].revelado {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Título palavra por palavra: o script embrulha cada palavra em
+   `.palavra > span`; a palavra sobe de dentro de uma máscara. */
+.palavra {
+  display: inline-block;
+  overflow: clip;
+  overflow-clip-margin: 0.12em;
+  vertical-align: top;
+  padding-bottom: 0.06em;
+}
+.palavra > span {
+  display: inline-block;
+}
+.revelacao [data-palavras] .palavra > span {
+  transform: translateY(105%) rotate(4deg);
+  transition: transform 0.9s var(--ease-suave);
+  transition-delay: calc(var(--p, 0) * 45ms);
+}
+.revelacao [data-palavras].revelado .palavra > span {
+  transform: none;
+}
+
+/* ---------------------------------------------------------------
+   Movimento — contínuo (decorativo)
+---------------------------------------------------------------- */
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flutuar {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0);
+  }
+}
+
+@keyframes deriva {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(6%, -4%, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-5%, 5%, 0) scale(0.95);
+  }
+}
+
+@keyframes faixa {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes pulso {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+@keyframes varrer {
+  0% {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  60%,
+  100% {
+    transform: translateX(260%) skewX(-20deg);
+  }
+}
+
+@keyframes piscar {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.girar {
+  animation: girar var(--dur, 40s) linear infinite;
+}
+.girar-reverso {
+  animation: girar var(--dur, 40s) linear infinite reverse;
+}
+.flutuar {
+  animation: flutuar var(--dur, 6s) ease-in-out infinite;
+  animation-delay: var(--atraso, 0s);
+}
+.deriva {
+  animation: deriva var(--dur, 22s) ease-in-out infinite;
+  animation-delay: var(--atraso, 0s);
+}
+
+/* Órbita: o filho gira com o anel e contra-gira em si mesmo, ficando
+   sempre de pé enquanto percorre o círculo. */
+.orbita {
+  animation: girar var(--dur, 60s) linear infinite;
+}
+.orbita > .satelite {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(-1 * var(--a)));
+}
+.orbita > .satelite > * {
+  animation: girar var(--dur, 60s) linear infinite reverse;
+}
+
+/* Faixa infinita: o conteúdo é duplicado no markup e corre metade da
+   largura. Pausa no hover para quem quer ler. */
+.faixa {
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.faixa-trilho {
+  display: flex;
+  width: max-content;
+  animation: faixa var(--dur, 50s) linear infinite;
+}
+.faixa-trilho.reverso {
+  animation-direction: reverse;
+}
+.faixa:hover .faixa-trilho {
+  animation-play-state: paused;
+}
+
+/* Botão principal: um brilho atravessa de tempos em tempos. */
+.brilho-varrer::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.45), transparent);
+  animation: varrer 4.5s var(--ease-suave) infinite;
+  animation-delay: 1.2s;
+  pointer-events: none;
+}
+
+/* Anel que pulsa atrás do botão flutuante do WhatsApp. */
+.pulso::before,
+.pulso::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  animation: pulso 2.4s var(--ease-suave) infinite;
+  z-index: -1;
+}
+.pulso::after {
+  animation-delay: 1.2s;
+}
+
+/* Cartão com holofote que segue o cursor (--mx/--my postos pelo script). */
+.holofote {
+  position: relative;
+  isolation: isolate;
+}
+.holofote::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, -20%),
+    rgb(246 162 0 / 0.1),
+    transparent 45%
+  );
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-suave);
+  z-index: -1;
+  pointer-events: none;
+}
+.holofote:hover::before {
+  opacity: 1;
+}
+
+/* Inclinação 3D (--rx/--ry postos pelo script). */
+.inclinar {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.5s var(--ease-suave);
+  transform-style: preserve-3d;
+}
+
+/* Linha do método: desenhada pela rolagem (--progresso de 0 a 1). */
+.linha-progresso {
+  transform-origin: top;
+  transform: scaleY(var(--progresso, 1));
+}
+.revelacao .etapa .marcador {
+  transition:
+    background-color 0.5s var(--ease-suave),
+    border-color 0.5s var(--ease-suave),
+    color 0.5s var(--ease-suave),
+    box-shadow 0.5s var(--ease-suave),
+    transform 0.6s var(--ease-mola);
+}
+.revelacao .etapa.revelado .marcador {
+  background-color: var(--color-ambar);
+  border-color: var(--color-ambar);
+  color: var(--color-sobre-ambar);
+  box-shadow: var(--shadow-ambar);
+  transform: rotate(360deg);
+}
+
+/* Cadeia Marca → … → Evolução: uma luz percorre os elos em sequência. */
+.elo {
+  animation: acender 9s var(--ease-suave) infinite;
+  animation-delay: calc(var(--i) * 1s);
+}
+@keyframes acender {
+  0%,
+  14%,
+  100% {
+    border-color: var(--color-linha-2);
+    color: var(--color-creme-2);
+    box-shadow: none;
+  }
+  4%,
+  9% {
+    border-color: var(--color-ambar);
+    color: var(--color-ambar-claro);
+    box-shadow: 0 0 24px rgb(246 162 0 / 0.25);
+  }
+}
+
+/* "Não somos": a linha risca cada item depois que o cartão entra. */
+.riscar::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 55%;
+  height: 1.5px;
+  background: var(--color-nao);
+  transform-origin: left;
+  transition: transform 0.7s var(--ease-suave);
+  transition-delay: calc(var(--i, 0) * 220ms + 500ms);
+}
+.revelacao [data-reveal]:not(.revelado) .riscar::after {
+  transform: scaleX(0);
+}
+
+/* Barra de progresso de leitura no topo. */
+.progresso-leitura {
+  transform-origin: left;
+  transform: scaleX(var(--leitura, 0));
+}
+
+/* Barra do celular e botão flutuante: aparecem depois do hero. */
+.barra-controlada [data-depois-hero] {
+  transition:
+    transform 0.45s var(--ease-suave),
+    opacity 0.45s var(--ease-suave),
+    visibility 0.45s;
+}
+.barra-controlada [data-depois-hero]:not(.visivel) {
+  transform: translateY(120%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Painéis das soluções: troca com fade + deslize. */
+.painel-solucao {
+  animation: painel 0.6s var(--ease-suave) both;
+}
+@keyframes painel {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .revelacao [data-reveal],
+  .revelacao [data-palavras] .palavra > span,
+  .inclinar {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .faixa-trilho {
+    flex-wrap: wrap;
+    width: auto;
+  }
+  .faixa-trilho > [aria-hidden="true"] {
+    display: none;
+  }
+}

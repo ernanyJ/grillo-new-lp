@@ -1,0 +1,71 @@
+---
+import Section from "@/components/ui/Section.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Button from "@/components/ui/Button.astro";
+import Icone from "@/components/ui/Icone.astro";
+import Cartao from "@/components/ui/CartaoProjeto.astro";
+import { projetos, cta } from "@/data/landing";
+
+const primeiros = projetos.items.slice(0, 6);
+const demais = projetos.items.slice(6);
+
+/**
+ * Doze áreas de projeto em cartões compactos: categoria, título, uma linha
+ * de contexto e as tags. O ícone gira ao passar o cursor. Seis aparecem;
+ * as outras seis abrem num clique (`<details>`), para a seção não virar
+ * uma parede de cartões.
+ */
+---
+
+<Section id="projetos" tone="fundo-2" filetes>
+  <SectionHeading
+    rotulo={projetos.rotulo}
+    title={projetos.title}
+    destaque={projetos.destaque}
+    subtitle={projetos.subtitle}
+  />
+
+  <ul class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      primeiros.map((p, i) => (
+        <li data-reveal style={`--i: ${i % 3}`}>
+          <Cartao p={p} />
+        </li>
+      ))
+    }
+  </ul>
+
+  <!-- As outras seis áreas ficam a um clique: a lista inteira continua no HTML. -->
+  <details class="group/mais mt-4">
+    <summary class="mx-auto flex w-fit cursor-pointer list-none items-center gap-2.5 rounded-full border border-linha-2 px-6 py-3 font-texto text-sm font-bold text-creme-2 transition-colors hover:border-ambar-fundo hover:text-ambar-claro group-open/mais:hidden [&::-webkit-details-marker]:hidden">
+      {projetos.verMais} (+{demais.length})
+      <Icone name="mais" class="size-4 text-ambar" espessura={2.5} />
+    </summary>
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        demais.map((p, i) => (
+          <li class="mais-item" style={`--i: ${i}`}>
+            <Cartao p={p} />
+          </li>
+        ))
+      }
+    </ul>
+  </details>
+
+  <div data-reveal class="mt-12 flex justify-center">
+    <Button posicao="projetos">{cta.projetoAssim}</Button>
+  </div>
+</Section>
+
+<style>
+  details[open] .mais-item {
+    animation: surgir 0.6s var(--ease-suave) both;
+    animation-delay: calc(var(--i) * 70ms);
+  }
+  @keyframes surgir {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+</style>

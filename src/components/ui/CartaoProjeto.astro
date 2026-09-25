@@ -1,0 +1,31 @@
+---
+import Icone from "@/components/ui/Icone.astro";
+import type { projetos } from "@/data/landing";
+
+/** Cartão de uma área de projeto: categoria, ícone, título, contexto e tags. */
+interface Props {
+  p: (typeof projetos.items)[number];
+}
+const { p } = Astro.props;
+---
+
+<article
+            data-inclinar
+            class="holofote group flex h-full flex-col rounded-bloco border border-linha bg-card p-7 transition-colors duration-500 hover:border-ambar-fundo/60"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <p class="rotulo text-[0.62rem] text-teal-claro">{p.categoria}</p>
+              <span class="grid size-11 shrink-0 place-items-center rounded-full border border-linha-2 bg-fundo-2 text-ambar transition-all duration-700 ease-mola group-hover:rotate-[360deg] group-hover:border-ambar group-hover:bg-ambar group-hover:text-sobre-ambar">
+                <Icone name={p.icone} class="size-5" espessura={1.8} />
+              </span>
+            </div>
+            <h3 class="mt-6 titulo text-[1.75rem] text-creme">{p.title}</h3>
+            <p class="mt-3 flex-1 font-texto text-[0.9375rem] leading-relaxed text-fosco">{p.text}</p>
+            <ul class="mt-6 flex flex-wrap gap-1.5">
+              {p.tags.map((t) => (
+                <li class="rounded-full border border-linha-2 px-2.5 py-1 font-texto text-[0.72rem] font-semibold text-creme-2">
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </article>

@@ -1,0 +1,45 @@
+---
+import Icone from "@/components/ui/Icone.astro";
+import Button from "@/components/ui/Button.astro";
+import { site } from "@/config/site";
+import { cta } from "@/data/landing";
+
+/**
+ * CTAs fixos, que aparecem depois do hero e saem de cena no formulário
+ * final (`src/scripts/rolagem.ts`). Sem script, ficam sempre visíveis.
+ *
+ *   desktop — botão redondo do WhatsApp, com pulso, no canto;
+ *   celular — barra inferior de largura total. O `body` reserva a altura.
+ */
+---
+
+<a
+  href={site.whatsapp.href}
+  target="_blank"
+  rel="noopener"
+  data-cta="flutuante"
+  data-depois-hero
+  aria-label={`${cta.falar} pelo WhatsApp`}
+  class="group fixed right-6 bottom-6 z-50 hidden md:block"
+>
+  <span
+    class="pulso relative isolate grid size-16 place-items-center rounded-full bg-whatsapp text-whatsapp shadow-alta transition-transform duration-500 ease-mola group-hover:scale-110"
+  >
+    <Icone name="whatsapp" class="size-8 text-[#fff]" />
+  </span>
+  <span
+    class="pointer-events-none absolute top-1/2 right-full mr-3 -translate-y-1/2 translate-x-2 rounded-full border border-linha-2 bg-card-2 px-4 py-2 font-texto text-sm font-bold whitespace-nowrap text-creme opacity-0 shadow-media transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+  >
+    {cta.falar}
+  </span>
+</a>
+
+<div
+  data-depois-hero
+  class="fixed inset-x-0 bottom-0 z-50 border-t border-ambar-fundo/60 bg-fundo/90 px-4 py-3 backdrop-blur-xl md:hidden"
+  style="padding-bottom: max(0.75rem, env(safe-area-inset-bottom))"
+>
+  <Button posicao="barra_mobile" size="compacto" block>
+    {cta.falar}
+  </Button>
+</div>

@@ -1,0 +1,34 @@
+---
+import simbolo from "@/assets/marca/grillo-simbolo.svg?raw";
+import completa from "@/assets/marca/grillo-completa.svg?raw";
+
+/**
+ * Logomarca da Grillo, discreta.
+ *
+ *   simbolo  — cabeçalho, 20 a 24 px de altura, ao lado de "Uma iniciativa Grillo".
+ *   completa — rodapé, 90 a 110 px de largura.
+ *
+ * Os SVGs vêm dos arquivos oficiais (`references/`), com a caixa recortada e
+ * a cor trocada por `currentColor`: a marca herda a cor do texto ao redor.
+ * Nunca é link — a logo não é botão de saída.
+ */
+interface Props {
+  versao: "simbolo" | "completa";
+  /** Nome acessível. Sem ele, a marca é decorativa. */
+  titulo?: string;
+  class?: string;
+}
+const { versao, titulo, class: className = "" }: Props = Astro.props;
+
+const svg = versao === "simbolo" ? simbolo : completa;
+const ajuste =
+  versao === "simbolo" ? "[&>svg]:h-full [&>svg]:w-auto" : "[&>svg]:h-auto [&>svg]:w-full";
+---
+
+<span
+  class:list={["inline-flex shrink-0", ajuste, className]}
+  role={titulo ? "img" : undefined}
+  aria-label={titulo}
+  aria-hidden={titulo ? undefined : "true"}
+  set:html={svg}
+/>

@@ -1,0 +1,73 @@
+---
+import Section from "@/components/ui/Section.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Button from "@/components/ui/Button.astro";
+import Faixa from "@/components/ui/Faixa.astro";
+import { paraQuem, cta } from "@/data/landing";
+
+/**
+ * Para quem é: os públicos correndo em faixa e os dez cenários como uma
+ * lista de verificação — a caixa se marca quando o item entra em cena.
+ */
+---
+
+<Section id="para-quem" tone="fundo">
+  <div class="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
+    <div class="lg:sticky lg:top-28">
+      <SectionHeading rotulo={paraQuem.rotulo} title={paraQuem.title} destaque={paraQuem.destaque} align="left" />
+      <p data-reveal class="mt-6 texto text-fosco">{paraQuem.subtitle}</p>
+      <Faixa
+        items={paraQuem.publicos}
+        duracao={28}
+        rotulo="Públicos"
+        class="mt-8"
+        itemClass="whitespace-nowrap rounded-full border border-linha-2 bg-card px-4 py-2 font-texto text-sm font-bold text-creme-2"
+      />
+      <div data-reveal class="mt-10 hidden lg:block">
+        <Button posicao="para_quem">{cta.improviso}</Button>
+      </div>
+    </div>
+
+    <ul class="grid gap-3">
+      {
+        paraQuem.items.map((item, i) => (
+          <li
+            data-reveal="direita"
+            style={`--i: ${i % 3}`}
+            class="verificar group flex items-center gap-4 rounded-caixa border border-linha bg-card p-5 transition-colors duration-500 hover:border-ambar-fundo/60"
+          >
+            <span aria-hidden="true" class="caixa grid size-8 shrink-0 place-items-center rounded-fio border border-ambar-fundo">
+              <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path pathLength="1" d="m4.5 12.5 4.8 4.8L19.5 7" />
+              </svg>
+            </span>
+            <span class="font-texto text-base leading-snug font-semibold text-creme-2 sm:text-[1.0625rem]">{item}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div data-reveal class="lg:hidden">
+      <Button posicao="para_quem" block>{cta.improviso}</Button>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .caixa {
+    background: var(--color-ambar);
+    color: var(--color-sobre-ambar);
+    transition: background-color 0.4s var(--ease-suave) 0.3s;
+  }
+  .caixa path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.5s var(--ease-suave) 0.45s;
+  }
+  :global(.revelacao) .verificar:not(:global(.revelado)) .caixa {
+    background: transparent;
+  }
+  :global(.revelacao) .verificar:not(:global(.revelado)) .caixa path {
+    stroke-dashoffset: 1;
+  }
+</style>

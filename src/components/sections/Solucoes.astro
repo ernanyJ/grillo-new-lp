@@ -1,0 +1,136 @@
+---
+import Section from "@/components/ui/Section.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Button from "@/components/ui/Button.astro";
+import Icone from "@/components/ui/Icone.astro";
+import { solucoes, cta } from "@/data/landing";
+
+/**
+ * As oito soluções em abas: uma de cada vez, em vez de oito blocos de texto
+ * empilhados. Aplicações viram chips; problemas que resolve, uma lista curta.
+ *
+ * Sem script, a lista de abas some e todos os painéis aparecem em sequência
+ * (`src/scripts/solucoes.ts` põe `com-abas` e o atributo `hidden`).
+ */
+const total = String(solucoes.items.length).padStart(2, "0");
+---
+
+<Section id="solucoes" tone="fundo">
+  <SectionHeading
+    rotulo={solucoes.rotulo}
+    title={solucoes.title}
+    destaque={solucoes.destaque}
+    subtitle={solucoes.subtitle}
+  />
+
+  <div data-solucoes data-reveal class="mt-14 grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-8">
+    <div
+      role="tablist"
+      aria-label="Soluções"
+      aria-orientation="vertical"
+      class="lista-abas -mx-4 hidden snap-x gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none] lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0"
+    >
+      {
+        solucoes.items.map((s, i) => (
+          <button
+            role="tab"
+            id={`aba-${i}`}
+            aria-controls={`painel-${i}`}
+            aria-selected={i === 0 ? "true" : "false"}
+            type="button"
+            class="group flex shrink-0 snap-start items-center gap-3 rounded-caixa border border-linha bg-card px-4 py-3 text-left transition-all duration-400 ease-suave hover:border-linha-2 aria-selected:border-ambar-fundo aria-selected:bg-card-2 lg:py-3.5"
+          >
+            <span class="font-texto text-[0.7rem] font-bold text-fosco-2 group-aria-selected:text-ambar">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span class="font-texto text-sm font-bold whitespace-nowrap text-fosco transition-colors group-hover:text-creme group-aria-selected:text-creme">
+              {s.nome}
+            </span>
+            <Icone
+              name="seta"
+              class="ml-auto hidden size-4 -translate-x-2 text-ambar opacity-0 transition-all duration-400 group-aria-selected:translate-x-0 group-aria-selected:opacity-100 lg:block"
+            />
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="grid gap-6">
+      {
+        solucoes.items.map((s, i) => (
+          <article
+            role="tabpanel"
+            id={`painel-${i}`}
+            aria-labelledby={`aba-${i}`}
+            tabindex="0"
+            class="holofote relative overflow-hidden rounded-bloco border border-linha-2 bg-linear-[155deg,var(--color-card-2),var(--color-fundo)_70%] p-7 shadow-alta sm:p-10"
+          >
+            <!-- Ícone gigante girando no canto -->
+            <div aria-hidden="true" class="absolute -top-10 -right-10 size-56 text-floresta">
+              <svg class="absolute inset-0 size-full girar" style="--dur: 24s" viewBox="0 0 100 100" fill="none">
+                <circle cx="50" cy="50" r="48" stroke="rgb(246 162 0 / 0.25)" stroke-dasharray="2 5" />
+              </svg>
+              <div class="absolute inset-[22%] grid place-items-center rounded-full bg-floresta/50">
+                <Icone name={s.icone} class="size-16 text-ambar/80 flutuar" espessura={1.3} />
+              </div>
+            </div>
+
+            <p class="relative rotulo text-ambar">
+              {String(i + 1).padStart(2, "0")} / {total} · {s.nome}
+            </p>
+            <h3 class="relative mt-5 max-w-[16ch] titulo text-[2.3rem] text-creme sm:text-[3rem]">{s.title}</h3>
+            <p class="relative mt-5 max-w-[52ch] texto text-fosco">{s.paragrafo}</p>
+
+            <div class="relative mt-8 grid gap-8 xl:grid-cols-[1.4fr_1fr]">
+              <div>
+                <h4 class="rotulo text-creme-2">Aplicações</h4>
+                <ul class="mt-4 flex flex-wrap gap-2">
+                  {s.aplicacoes.map((a, j) => (
+                    <li
+                      class="chip rounded-full border border-linha-2 bg-fundo/60 px-3.5 py-2 font-texto text-[0.8125rem] font-semibold text-creme-2 transition-colors hover:border-ambar-fundo hover:text-ambar-claro"
+                      style={`--j: ${j}`}
+                    >
+                      {a}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 class="rotulo text-creme-2">Problemas que resolve</h4>
+                <ul class="mt-4 grid gap-2">
+                  {s.problemas.map((p, j) => (
+                    <li class="chip flex items-center gap-2.5 font-texto text-sm text-fosco" style={`--j: ${j}`}>
+                      <Icone name="check" class="size-4 text-teal-claro" espessura={2.5} />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+
+  <div data-reveal class="mt-12 flex justify-center">
+    <Button posicao="solucoes">{cta.conversar}</Button>
+  </div>
+</Section>
+
+<style>
+  .com-abas .lista-abas {
+    display: flex;
+  }
+  /* Os chips do painel entram um a um quando a aba troca. */
+  .painel-solucao .chip {
+    animation: chip 0.5s var(--ease-suave) both;
+    animation-delay: calc(var(--j) * 35ms + 150ms);
+  }
+  @keyframes chip {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+    }
+  }
+</style>

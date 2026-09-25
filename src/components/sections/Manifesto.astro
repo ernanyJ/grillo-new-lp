@@ -1,0 +1,106 @@
+---
+import Section from "@/components/ui/Section.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Button from "@/components/ui/Button.astro";
+import Destaque from "@/components/ui/Destaque.astro";
+import { manifesto, cta } from "@/data/landing";
+
+/**
+ * Manifesto em duas partes.
+ *   1. O título e os seis pares ("Alma + método"…) como peças que se juntam.
+ *   2. Os gargalos: à esquerda, as ferramentas que a marca já tem flutuando
+ *      soltas; à direita, os oito gargalos numerados entrando em sequência.
+ */
+const g = manifesto.gargalos;
+---
+
+<Section id="manifesto" tone="fundo">
+  <SectionHeading
+    rotulo={manifesto.rotulo}
+    title={manifesto.title}
+    destaque={manifesto.destaque}
+    subtitle={manifesto.paragrafo}
+  />
+
+  <ul class="mx-auto mt-14 grid max-w-5xl grid-cols-2 gap-3 sm:grid-cols-3">
+    {
+      manifesto.pares.map(([a, b], i) => (
+        <li
+          data-reveal="escala"
+          style={`--i: ${i}`}
+          class="holofote group relative flex flex-col items-center justify-center gap-1 overflow-hidden rounded-caixa border border-linha bg-card px-4 py-7 text-center transition-colors duration-500 hover:border-ambar-fundo/60 sm:py-9"
+        >
+          <span class="absolute top-3 left-4 font-texto text-[0.65rem] font-bold text-fosco-2">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <span class="titulo text-[1.7rem] text-creme transition-transform duration-500 ease-suave group-hover:-translate-y-1 sm:text-[2.2rem]">
+            {a}
+          </span>
+          <span
+            aria-hidden="true"
+            class="grid size-7 place-items-center rounded-full border border-ambar-fundo/70 font-texto text-sm font-bold text-ambar transition-transform duration-700 ease-mola group-hover:rotate-180"
+          >
+            +
+          </span>
+          <span class="sr-only">+</span>
+          <span class="titulo text-[1.7rem] text-ambar-claro transition-transform duration-500 ease-suave group-hover:translate-y-1 sm:text-[2.2rem]">
+            {b}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="mt-24 grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+    <div class="lg:sticky lg:top-28">
+      <h3 data-reveal data-palavras class="max-w-[18ch] titulo text-[2.2rem] text-creme sm:text-[2.9rem]">
+        <Destaque texto={g.title} destaque={g.destaque} />
+      </h3>
+      <p data-reveal class="mt-5 texto text-fosco">{g.paragrafo}</p>
+
+      <!-- As ferramentas que já existem, soltas, sem conversar entre si. -->
+      <ul aria-label="Ferramentas que muitas marcas já têm" class="mt-8 flex flex-wrap gap-2.5">
+        {
+          g.ferramentas.map((f, i) => (
+            <li
+              data-reveal="escala"
+              style={`--i: ${i}`}
+            >
+              <span
+                class="flutuar inline-block rounded-full border border-dashed border-linha-2 bg-card/50 px-4 py-2 font-texto text-sm font-semibold text-fosco"
+                style={`--dur: ${4 + (i % 3)}s; --atraso: -${i * 0.7}s`}
+              >
+                {f}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div data-reveal class="mt-10 hidden lg:block">
+        <Button posicao="manifesto">{cta.estruturar}</Button>
+      </div>
+    </div>
+
+    <ol class="grid gap-3">
+      {
+        g.items.map((item, i) => (
+          <li
+            data-reveal="direita"
+            style={`--i: ${i % 4}`}
+            class="group flex items-center gap-5 rounded-caixa border border-linha bg-card p-5 transition-all duration-500 hover:translate-x-2 hover:border-ambar-fundo/60 hover:bg-card-2"
+          >
+            <span class="numero shrink-0 text-[2.2rem] text-transparent [-webkit-text-stroke:1px_var(--color-ambar)] transition-colors duration-500 group-hover:text-ambar">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span class="font-texto text-base leading-snug font-semibold text-creme-2 sm:text-lg">{item}</span>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div data-reveal class="lg:hidden">
+      <Button posicao="manifesto" block>{cta.estruturar}</Button>
+    </div>
+  </div>
+</Section>

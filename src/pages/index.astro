@@ -1,0 +1,46 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import DadosEstruturados from "@/components/DadosEstruturados.astro";
+import Hero from "@/components/sections/Hero.astro";
+import Provas from "@/components/sections/Provas.astro";
+import Manifesto from "@/components/sections/Manifesto.astro";
+import Sobre from "@/components/sections/Sobre.astro";
+import Solucoes from "@/components/sections/Solucoes.astro";
+import Metodo from "@/components/sections/Metodo.astro";
+import Entregas from "@/components/sections/Entregas.astro";
+import Diferenciais from "@/components/sections/Diferenciais.astro";
+import Projetos from "@/components/sections/Projetos.astro";
+import Depoimentos from "@/components/sections/Depoimentos.astro";
+import ParaQuem from "@/components/sections/ParaQuem.astro";
+import Fundador from "@/components/sections/Fundador.astro";
+import Duvidas from "@/components/sections/Duvidas.astro";
+import Contato from "@/components/sections/Contato.astro";
+---
+
+{
+  /* Mesmo conteúdo do site atual, em ordem de conversão: quem é e onde
+     clicar · por que confiar (os números vêm logo depois do hero) · o
+     problema · o que é a Grillo · o que ela faz · como faz · o que entrega ·
+     por que ela · onde já fez · o que dizem · para quem é · quem conduz ·
+     dúvidas · a conversa.
+
+     Ritmo: `fundo` e `fundo-2` alternando; o halo âmbar fica para o contato. */
+}
+<BaseLayout>
+  <DadosEstruturados slot="head" />
+
+  <Hero />
+  <Provas />
+  <Manifesto />
+  <Sobre />
+  <Solucoes />
+  <Metodo />
+  <Entregas />
+  <Diferenciais />
+  <Projetos />
+  <Depoimentos />
+  <ParaQuem />
+  <Fundador />
+  <Duvidas />
+  <Contato />
+</BaseLayout>

@@ -1,0 +1,91 @@
+---
+import { Image } from "astro:assets";
+import Section from "@/components/ui/Section.astro";
+import Pilula from "@/components/ui/Pilula.astro";
+import Button from "@/components/ui/Button.astro";
+import Destaque from "@/components/ui/Destaque.astro";
+import Icone from "@/components/ui/Icone.astro";
+import foto from "@/assets/fundador.jpg";
+import { fundador, cta } from "@/data/landing";
+
+/**
+ * Fundador: a foto numa moldura tracejada que corre, o selo flutuando, e a citação em
+ * destaque. A síntese vira quatro pares.
+ */
+---
+
+<Section id="fundador" tone="fundo-2" filetes>
+  <div class="grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+    <div data-reveal="escala" class="relative mx-auto w-full max-w-[26rem]">
+      <!-- Moldura tracejada que corre em volta da foto. -->
+      <svg aria-hidden="true" class="absolute -inset-4 size-[calc(100%+2rem)] overflow-visible" fill="none">
+        <rect x="0.5" y="0.5" width="100%" height="100%" rx="30" class="moldura" stroke="rgb(246 162 0 / 0.45)" stroke-dasharray="6 10" />
+      </svg>
+      <div class="relative overflow-hidden rounded-bloco border border-linha-2 shadow-alta">
+        <Image
+          src={foto}
+          alt={fundador.alt}
+          widths={[400, 640, 900]}
+          sizes="(min-width: 1024px) 26rem, 90vw"
+          class="aspect-[4/5] w-full object-cover object-top"
+          loading="lazy"
+        />
+        <div class="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-fundo/90 to-transparent"></div>
+      </div>
+      <p
+        class="flutuar absolute -right-3 bottom-10 inline-flex items-center gap-2 rounded-full border border-ambar-fundo bg-card-2 px-4 py-2.5 rotulo text-[0.62rem] text-ambar-claro shadow-alta sm:-right-8"
+      >
+        <Icone name="alvo" class="size-4" />
+        {fundador.tag}
+      </p>
+    </div>
+
+    <div>
+      <div data-reveal="escala"><Pilula>{fundador.rotulo}</Pilula></div>
+      <h2 data-reveal data-palavras class="mt-6 max-w-[20ch] titulo text-[2.4rem] text-creme sm:text-[3.2rem]">
+        <Destaque texto={fundador.title} destaque={fundador.destaque} />
+      </h2>
+      {fundador.paragrafos.map((p) => <p data-reveal class="mt-5 texto text-fosco">{p}</p>)}
+
+      <blockquote
+        data-reveal="foco"
+        class="relative mt-8 rounded-bloco border-l-2 border-ambar bg-card px-7 py-6"
+      >
+        <Icone name="aspas" class="absolute -top-4 left-5 size-8 text-ambar" />
+        <p class="titulo text-[1.6rem] leading-[1.05] text-creme sm:text-[1.9rem]">{fundador.citacao}</p>
+      </blockquote>
+
+      <p data-reveal class="mt-8 font-texto text-sm font-semibold text-fosco">{fundador.sintese}</p>
+      <ul class="mt-4 grid grid-cols-2 gap-2.5">
+        {
+          fundador.pares.map(([a, b], i) => (
+            <li
+              data-reveal="escala"
+              style={`--i: ${i}`}
+              class="rounded-caixa border border-linha bg-card px-4 py-3 font-texto text-sm font-bold text-creme-2"
+            >
+              {a} <span class="text-ambar">e</span> {b}
+            </li>
+          ))
+        }
+      </ul>
+
+      <div data-reveal class="mt-10">
+        <Button posicao="fundador">{cta.conversar}</Button>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .moldura {
+    width: calc(100% - 1px);
+    height: calc(100% - 1px);
+    animation: correr 2.5s linear infinite;
+  }
+  @keyframes correr {
+    to {
+      stroke-dashoffset: -32;
+    }
+  }
+</style>

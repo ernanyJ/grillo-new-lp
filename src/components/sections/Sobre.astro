@@ -1,0 +1,119 @@
+---
+import Section from "@/components/ui/Section.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Button from "@/components/ui/Button.astro";
+import Icone from "@/components/ui/Icone.astro";
+import Destaque from "@/components/ui/Destaque.astro";
+import LogoGrillo from "@/components/ui/LogoGrillo.astro";
+import { sobre, cta } from "@/data/landing";
+
+/**
+ * "O que é": os quatro papéis girando em volta do símbolo, a comparação
+ * "não somos / somos" e a cadeia Marca → … → Evolução, em que uma luz
+ * percorre os elos em sequência.
+ */
+const papeis = sobre.papeis;
+const somos = sobre.naoSomos.split(" Somos ")[1] ?? sobre.naoSomos;
+---
+
+<Section id="sobre" tone="fundo-2" filetes>
+  <div class="grid items-center gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+    <div>
+      <SectionHeading rotulo={sobre.rotulo} title={sobre.title} destaque={sobre.destaque} align="left" />
+      <p data-reveal class="mt-6 texto text-fosco sm:text-lg">{sobre.paragrafo}</p>
+    </div>
+
+    <!-- Os quatro papéis nos cantos, em volta do símbolo. -->
+    <div data-reveal="escala" class="relative mx-auto aspect-square w-full max-w-[26rem]">
+      <svg aria-hidden="true" class="absolute inset-0 size-full girar" style="--dur: 50s" viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="98" stroke="rgb(147 191 191 / 0.18)" stroke-dasharray="1 6" />
+        <circle cx="100" cy="100" r="62" stroke="rgb(246 162 0 / 0.28)" stroke-dasharray="24 10" />
+      </svg>
+      <div class="absolute inset-[36%] grid place-items-center rounded-full border border-ambar-fundo/50 bg-floresta/40 shadow-ambar">
+        <LogoGrillo versao="simbolo" class="h-1/2 text-ambar" />
+      </div>
+      <ul>
+        {
+          papeis.map((p, i) => {
+            const pos = [
+              "top-[10%] left-0",
+              "top-[10%] right-0",
+              "bottom-[10%] left-0",
+              "bottom-[10%] right-0",
+            ][i];
+            return (
+              <li class:list={["absolute", pos]}>
+                <span
+                  class="flutuar block rounded-caixa border border-linha-2 bg-card-2 px-4 py-3 text-center titulo text-[1.15rem] whitespace-nowrap text-creme shadow-media sm:text-[1.35rem]"
+                  style={`--atraso: -${i * 1.5}s`}
+                >
+                  {p}
+                </span>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </div>
+
+  <!-- Não somos / Somos -->
+  <div class="mt-20 grid gap-4 md:grid-cols-2">
+    <div data-reveal="esquerda" class="rounded-bloco border border-linha bg-card p-8">
+      <p class="rotulo text-fosco-2">Não somos</p>
+      <ul class="mt-5 grid gap-3">
+        {
+          sobre.naoSomosLista.map((item, i) => (
+            <li class="flex items-center gap-3 font-texto text-lg font-semibold text-fosco">
+              <span class="grid size-7 shrink-0 place-items-center rounded-full border border-nao/40 text-nao">
+                <Icone name="x" class="size-3.5" espessura={2.5} />
+              </span>
+              <span
+                class="riscar relative"
+                style={`--i:${i}`}
+              >
+                {item}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div
+      data-reveal="direita"
+      class="holofote relative overflow-hidden rounded-bloco border border-ambar-fundo/60 bg-linear-[160deg,var(--color-card-2),var(--color-fundo-2)] p-8"
+    >
+      <p class="rotulo text-ambar">Somos</p>
+      <p class="mt-5 font-texto text-lg leading-relaxed font-medium text-creme">{somos}</p>
+    </div>
+  </div>
+
+  <!-- A cadeia do sistema inteiro -->
+  <div class="mt-20">
+    <p data-reveal class="mx-auto max-w-[62ch] text-center texto text-fosco">{sobre.sistema}</p>
+    <ol data-reveal class="mt-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-3">
+      {
+        sobre.cadeia.map((elo, i) => (
+          <li class="flex items-center gap-2">
+            <span
+              class="elo rounded-full border border-linha-2 bg-card px-5 py-2.5 titulo text-[1.3rem] text-creme-2 sm:text-[1.5rem]"
+              style={`--i: ${i}`}
+            >
+              {elo}
+            </span>
+            {i < sobre.cadeia.length - 1 && (
+              <Icone name="seta" class="size-4 text-fosco-2" />
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  <div data-reveal class="mt-16 flex flex-col items-center gap-8 text-center">
+    <p class="max-w-[28ch] titulo text-[2rem] text-creme sm:text-[2.8rem]">
+      <Destaque texto={sobre.fecho} destaque={sobre.fechoDestaque} />
+    </p>
+    <Button posicao="sobre">{cta.conversar}</Button>
+  </div>
+</Section>

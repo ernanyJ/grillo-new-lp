@@ -1,0 +1,48 @@
+---
+import Section from "@/components/ui/Section.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Button from "@/components/ui/Button.astro";
+import Faixa from "@/components/ui/Faixa.astro";
+import { entregas, cta } from "@/data/landing";
+
+/**
+ * As 25 entregas em três faixas correndo em sentidos alternados — a lista
+ * inteira está lá, mas lida como movimento, não como parede de texto.
+ */
+const terco = Math.ceil(entregas.items.length / 3);
+const linhas = [0, 1, 2].map((i) => entregas.items.slice(i * terco, (i + 1) * terco));
+---
+
+<Section id="entregas" tone="fundo" containerClass="text-center">
+  <SectionHeading
+    rotulo={entregas.rotulo}
+    title={entregas.title}
+    destaque={entregas.destaque}
+    subtitle={entregas.subtitle}
+  />
+
+  <div slot="fundo" aria-hidden="true" class="pointer-events-none absolute inset-0 grade"></div>
+
+  <div data-reveal="foco" class="relative left-1/2 mt-14 grid w-screen -translate-x-1/2 gap-4 -rotate-2">
+    {
+      linhas.map((linha, i) => (
+        <Faixa
+          items={linha}
+          reverso={i % 2 === 1}
+          duracao={40 + i * 8}
+          rotulo={i === 0 ? "Entregas da Grillo" : undefined}
+          itemClass={[
+            "whitespace-nowrap rounded-full border px-6 py-3.5 font-texto text-base font-bold sm:text-lg",
+            i === 1
+              ? "border-ambar-fundo/60 bg-ambar/10 text-ambar-claro"
+              : "border-linha-2 bg-card text-creme-2",
+          ].join(" ")}
+        />
+      ))
+    }
+  </div>
+
+  <div data-reveal class="mt-14 flex justify-center">
+    <Button posicao="entregas">{cta.tenhoProjeto}</Button>
+  </div>
+</Section>

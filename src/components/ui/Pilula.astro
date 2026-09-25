@@ -1,0 +1,25 @@
+---
+/**
+ * Pílula de rótulo: contorno âmbar sobre véu âmbar, com um ponto que pisca.
+ * Identifica a seção. Nunca é botão nem link.
+ */
+interface Props {
+  class?: string;
+  ponto?: boolean;
+}
+const { class: className = "", ponto = true }: Props = Astro.props;
+---
+
+<span
+  class:list={[
+    "inline-flex items-center gap-2.5 rounded-full border border-ambar-fundo/70 bg-ambar/10 px-4 py-2 rotulo text-ambar-claro backdrop-blur-sm",
+    className,
+  ]}
+>
+  {
+    ponto && (
+      <span aria-hidden="true" class="size-1.5 rounded-full bg-ambar [animation:piscar_2s_ease-in-out_infinite]" />
+    )
+  }
+  <slot />
+</span>

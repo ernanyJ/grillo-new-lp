@@ -1,0 +1,56 @@
+---
+import Section from "@/components/ui/Section.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Button from "@/components/ui/Button.astro";
+import Icone from "@/components/ui/Icone.astro";
+import { duvidas, cta } from "@/data/landing";
+
+/**
+ * FAQ em <details> nativo (uma aberta por vez via `name`). Inclui as
+ * "dúvidas comuns" que ficavam ao lado do formulário no site atual — prazo e
+ * contratos —, para o contato final ficar só com a ação.
+ */
+---
+
+<Section id="faq" tone="fundo" size="md">
+  <SectionHeading rotulo={duvidas.rotulo} title={duvidas.title} destaque={duvidas.destaque} />
+
+  <div class="mx-auto mt-12 max-w-[46rem]">
+    {
+      duvidas.items.map((item, i) => (
+        <details
+          data-reveal
+          style={`--i: ${i % 4}`}
+          name="faq"
+          class="group mb-2.5 overflow-hidden rounded-caixa border border-linha bg-card transition-colors duration-300 open:border-ambar-fundo open:bg-card-2"
+        >
+          <summary class="flex min-h-16 cursor-pointer list-none items-center justify-between gap-5 px-6 py-4 [&::-webkit-details-marker]:hidden">
+            <h3 class="font-texto text-[0.9875rem] leading-snug font-bold text-creme transition-colors group-hover:text-ambar-claro group-open:text-ambar sm:text-base">
+              {item.question}
+            </h3>
+            <span class="grid size-8 shrink-0 place-items-center rounded-full border border-linha-2 text-ambar transition-all duration-500 ease-mola group-open:rotate-[135deg] group-open:border-ambar group-open:bg-ambar group-open:text-sobre-ambar">
+              <Icone name="mais" class="size-4" espessura={2.5} />
+            </span>
+          </summary>
+          <p class="resposta px-6 pb-6 font-texto text-[0.9375rem] leading-relaxed text-fosco">{item.answer}</p>
+        </details>
+      ))
+    }
+  </div>
+
+  <div data-reveal class="mt-12 flex justify-center">
+    <Button posicao="faq">{cta.diagnostico}</Button>
+  </div>
+</Section>
+
+<style>
+  details[open] .resposta {
+    animation: abrir 0.45s var(--ease-suave);
+  }
+  @keyframes abrir {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+</style>

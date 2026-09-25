@@ -1,0 +1,68 @@
+---
+import "@/styles/global.css";
+import SEO from "@/components/SEO.astro";
+import Header from "@/components/sections/Header.astro";
+import Footer from "@/components/sections/Footer.astro";
+import CtaFixo from "@/components/sections/CtaFixo.astro";
+import { site } from "@/config/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+const { title, description, noindex } = Astro.props;
+const { gtmId } = site.analytics;
+---
+
+<!doctype html>
+<html lang={site.locale}>
+  <head>
+    <SEO title={title} description={description} noindex={noindex} />
+    {
+      gtmId && (
+        <script is:inline define:vars={{ gtmId }}>
+          (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+            var f = d.getElementsByTagName(s)[0],
+              j = d.createElement(s);
+            j.async = true;
+            j.src = "https://www.googletagmanager.com/gtm.js?id=" + i;
+            f.parentNode.insertBefore(j, f);
+          })(window, document, "script", "dataLayer", gtmId);
+        </script>
+      )
+    }
+    <slot name="head" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    />
+  </head>
+  <!-- A folga inferior no celular é a altura da barra fixa. -->
+  <body class="min-h-dvh pb-20 md:pb-0">
+    <a
+      href="#conteudo"
+      class="sr-only rotulo focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-999 focus:rounded-fio focus:bg-ambar focus:px-5 focus:py-3 focus:text-sobre-ambar"
+    >
+      Pular para o conteúdo
+    </a>
+
+    <Header />
+
+    <main id="conteudo">
+      <slot />
+    </main>
+
+    <Footer />
+    <CtaFixo />
+
+    <script>
+      import "@/scripts/main";
+    </script>
+  </body>
+</html>

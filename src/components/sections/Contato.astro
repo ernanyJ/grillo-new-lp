@@ -1,0 +1,122 @@
+---
+import Section from "@/components/ui/Section.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Icone from "@/components/ui/Icone.astro";
+import SimboloGirando from "@/components/ui/SimboloGirando.astro";
+import { site } from "@/config/site";
+import { contato, cta, hero } from "@/data/landing";
+
+/**
+ * Fechamento: o WhatsApp em destaque à esquerda e o formulário à direita
+ * (Web3Forms, mesmo endpoint do site atual). Sem script o <form> envia por
+ * POST comum; com script, o estado aparece no próprio formulário.
+ */
+const c = contato.campos;
+const campo =
+  "peer w-full rounded-fio border border-linha-2 bg-fundo/70 px-4 pt-6 pb-2.5 font-texto text-[0.9375rem] text-creme outline-none transition-colors placeholder:text-transparent focus:border-ambar hover:border-fosco-2";
+const rotulo =
+  "pointer-events-none absolute top-2 left-4 font-texto text-[0.68rem] font-bold tracking-[0.08em] text-fosco uppercase transition-colors peer-focus:text-ambar";
+---
+
+<Section id="contato" tone="brilho" filetes>
+  <div slot="fundo" aria-hidden="true" class="pointer-events-none absolute -bottom-40 -left-40 w-[34rem] opacity-40">
+    <SimboloGirando anel={hero.anel} />
+  </div>
+
+  <div class="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16">
+    <div class="lg:sticky lg:top-28">
+      <SectionHeading rotulo={contato.rotulo} title={contato.title} destaque={contato.destaque} align="left" />
+      <p data-reveal class="mt-6 texto text-fosco sm:text-lg">{contato.subtitle}</p>
+
+      <a
+        data-reveal="escala"
+        href={site.whatsapp.href}
+        target="_blank"
+        rel="noopener"
+        data-cta="contato"
+        class="group mt-10 flex items-center gap-5 rounded-bloco border border-whatsapp/40 bg-whatsapp/10 p-5 transition-all duration-500 hover:-translate-y-1 hover:border-whatsapp hover:bg-whatsapp/15"
+      >
+        <span class="pulso relative isolate grid size-14 shrink-0 place-items-center rounded-full bg-whatsapp text-whatsapp">
+          <Icone name="whatsapp" class="size-7 text-[#fff]" />
+        </span>
+        <span class="flex-1">
+          <span class="block titulo text-[1.8rem] text-creme">{cta.falar}</span>
+          <span class="block font-texto text-sm text-fosco">{cta.whatsapp}</span>
+        </span>
+        <Icone name="seta" class="size-6 text-whatsapp transition-transform duration-300 group-hover:translate-x-1.5" />
+      </a>
+
+      <a
+        data-reveal
+        href={`mailto:${site.contact.email}`}
+        class="mt-4 inline-flex items-center gap-2.5 font-texto text-sm font-semibold text-fosco transition-colors hover:text-ambar-claro"
+      >
+        <Icone name="email" class="size-4 text-ambar" />
+        {site.contact.email}
+      </a>
+    </div>
+
+    <form
+      data-reveal="direita"
+      data-formulario
+      action={site.formulario.endpoint}
+      method="POST"
+      data-enviando={contato.enviando}
+      data-sucesso={contato.sucesso}
+      data-erro={contato.erro}
+      class="group/form relative rounded-bloco border border-linha-2 bg-card/90 p-6 shadow-alta backdrop-blur sm:p-9"
+    >
+      <input type="hidden" name="access_key" value={site.formulario.chave} />
+      <input type="hidden" name="subject" value={site.formulario.assunto} />
+      <input type="hidden" name="from_name" value={site.formulario.remetente} />
+      <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="relative">
+          <input class={campo} name="name" required autocomplete="name" placeholder={c.nome} />
+          <span class={rotulo}>{c.nome} *</span>
+        </label>
+        <label class="relative">
+          <input class={campo} name="email" type="email" required autocomplete="email" placeholder={c.email} />
+          <span class={rotulo}>{c.email} *</span>
+        </label>
+        <label class="relative">
+          <input class={campo} name="phone" type="tel" autocomplete="tel" placeholder={c.telefone} />
+          <span class={rotulo}>{c.telefone}</span>
+        </label>
+        <label class="relative">
+          <input class={campo} name="company" autocomplete="organization" placeholder={c.empresa} />
+          <span class={rotulo}>{c.empresa}</span>
+        </label>
+        <label class="relative sm:col-span-2">
+          <select class:list={[campo, "appearance-none"]} name="project_type">
+            <option value="">{c.tipoVazio}</option>
+            {contato.tipos.map((t) => <option value={t}>{t}</option>)}
+          </select>
+          <span class={rotulo}>{c.tipo}</span>
+          <Icone name="abaixo" class="pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2 text-fosco" />
+        </label>
+        <label class="relative sm:col-span-2">
+          <textarea class:list={[campo, "min-h-36 resize-y"]} name="message" required placeholder={c.mensagem}></textarea>
+          <span class={rotulo}>{c.mensagem} *</span>
+        </label>
+      </div>
+
+      <button
+        type="submit"
+        data-magnetico
+        class="group relative isolate mt-6 inline-flex min-h-14 w-full items-center justify-center gap-3 overflow-hidden rounded-full bg-linear-[180deg,var(--color-ambar-claro),var(--color-ambar)_55%,var(--color-ambar-fundo)] px-7 py-4 font-texto text-[0.9375rem] font-extrabold tracking-[0.05em] text-sobre-ambar uppercase shadow-media inset-shadow-[0_1px_0_rgb(255_255_255/0.55)] brilho-varrer transition-[box-shadow,filter] duration-300 hover:shadow-ambar disabled:cursor-wait disabled:opacity-70"
+      >
+        <span>{contato.enviar}</span>
+        <Icone name="seta" class="size-4 transition-transform duration-300 group-hover:translate-x-1" espessura={2.25} />
+      </button>
+
+      <p
+        data-status
+        role="status"
+        aria-live="polite"
+        class="mt-4 text-center font-texto text-sm font-semibold empty:hidden group-data-[estado=enviado]/form:text-teal-claro group-data-[estado=erro]/form:text-nao"
+      ></p>
+    </form>
+  </div>
+</Section>

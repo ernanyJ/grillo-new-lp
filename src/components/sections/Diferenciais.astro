@@ -1,0 +1,48 @@
+---
+import Section from "@/components/ui/Section.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Button from "@/components/ui/Button.astro";
+import { diferenciais, cta } from "@/data/landing";
+
+/**
+ * Oito diferenciais em cartões que inclinam em direção ao cursor, com o
+ * número vazado ao fundo e a luz âmbar sob o ponteiro.
+ */
+---
+
+<Section id="diferenciais" tone="fundo-2" filetes>
+  <SectionHeading rotulo={diferenciais.rotulo} title={diferenciais.title} destaque={diferenciais.destaque} />
+
+  <ul class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      diferenciais.items.map((d, i) => (
+        <li data-reveal style={`--i: ${i % 4}`}>
+          <article
+            data-inclinar
+            class="holofote group relative h-full overflow-hidden rounded-bloco border border-linha bg-card p-7 transition-colors duration-500 hover:border-ambar-fundo/60"
+          >
+            <span
+              aria-hidden="true"
+              class="absolute -top-4 -right-2 numero text-[7rem] text-transparent [-webkit-text-stroke:1px_var(--color-linha-2)] transition-all duration-700 ease-suave group-hover:-translate-y-2 group-hover:[-webkit-text-stroke-color:var(--color-ambar-fundo)]"
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <p class="relative inline-flex rounded-full border border-linha-2 px-3 py-1 rotulo text-[0.62rem] text-ambar-claro">
+              {d.tag}
+            </p>
+            <h3 class="relative mt-10 titulo text-[1.9rem] text-creme">{d.title}</h3>
+            <p class="relative mt-3 font-texto text-[0.9375rem] leading-relaxed text-fosco">{d.text}</p>
+            <span
+              aria-hidden="true"
+              class="absolute inset-x-7 bottom-0 h-0.5 origin-left scale-x-0 bg-linear-to-r from-ambar to-teal transition-transform duration-700 ease-suave group-hover:scale-x-100"
+            />
+          </article>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div data-reveal class="mt-12 flex justify-center">
+    <Button posicao="diferenciais">{cta.estruturar}</Button>
+  </div>
+</Section>

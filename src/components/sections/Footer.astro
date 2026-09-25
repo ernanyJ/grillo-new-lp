@@ -1,0 +1,83 @@
+---
+import Container from "@/components/ui/Container.astro";
+import LogoGrillo from "@/components/ui/LogoGrillo.astro";
+import Icone from "@/components/ui/Icone.astro";
+import Faixa from "@/components/ui/Faixa.astro";
+import { site } from "@/config/site";
+import { nav, rodape, solucoes, cta } from "@/data/landing";
+
+const year = new Date().getFullYear();
+const link = "transition-colors hover:text-ambar-claro";
+---
+
+<footer class="relative overflow-hidden border-t border-linha bg-preto pt-16 text-fosco">
+  <Container class="flex flex-col gap-12">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div>
+        <LogoGrillo versao="completa" titulo="Grillo" class="w-[120px] text-creme" />
+        <p class="mt-6 max-w-[40ch] font-texto text-sm leading-relaxed">{rodape.descricao}</p>
+        <ul class="mt-6 flex gap-2">
+          {
+            site.social.map((s) => (
+              <li>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={s.label}
+                  class="grid size-10 place-items-center rounded-full border border-linha-2 text-creme-2 transition-all duration-300 hover:-translate-y-1 hover:border-ambar hover:text-ambar"
+                >
+                  <Icone name={s.rede} class="size-[18px]" espessura={1.8} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <nav aria-label="Navegação">
+        <p class="rotulo text-ambar">Navegação</p>
+        <ul class="mt-4 flex flex-col gap-2.5 font-texto text-sm font-medium">
+          <li><a href="#topo" class={link}>Início</a></li>
+          {nav.map((n) => <li><a href={n.href} class={link}>{n.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <div>
+        <p class="rotulo text-ambar">Soluções</p>
+        <ul class="mt-4 flex flex-col gap-2.5 font-texto text-sm font-medium">
+          {solucoes.items.map((s) => <li><a href="#solucoes" class={link}>{s.curto}</a></li>)}
+        </ul>
+      </div>
+
+      <div>
+        <p class="rotulo text-ambar">Contato</p>
+        <ul class="mt-4 flex flex-col gap-2.5 font-texto text-sm font-medium">
+          <li><a href={`mailto:${site.contact.email}`} class={link}>{site.contact.email}</a></li>
+          <li>
+            <a href={site.whatsapp.href} target="_blank" rel="noopener" data-cta="contato" class={link}>
+              {cta.whatsapp} →
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-start justify-between gap-4 border-t border-linha py-8 sm:flex-row sm:items-center">
+      <p class="font-texto text-xs text-fosco-2">© {year} {rodape.assinatura}</p>
+      <a href="#topo" class="group inline-flex items-center gap-2 rotulo text-fosco-2 hover:text-ambar-claro">
+        {rodape.topo}
+        <Icone name="seta-cima" class="size-4 transition-transform group-hover:-translate-y-1" />
+      </a>
+    </div>
+  </Container>
+
+  <!-- Assinatura gigante correndo no pé da página. -->
+  <div aria-hidden="true" class="pointer-events-none -mb-6 select-none">
+    <Faixa
+      items={["Marcas", "IA", "Sistemas", "Estratégia", "Vendas", "Dados"]}
+      duracao={60}
+      itemClass="titulo text-[5rem] sm:text-[9rem] text-transparent [-webkit-text-stroke:1px_var(--color-linha-2)] whitespace-nowrap pr-10"
+    />
+  </div>
+</footer>

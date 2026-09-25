@@ -1,0 +1,16 @@
+---
+/**
+ * Pinta em âmbar o trecho `destaque` dentro de `texto`. O texto continua uma
+ * frase inteira no HTML. Sem correspondência, sai sem destaque.
+ */
+interface Props {
+  texto: string;
+  destaque?: string;
+}
+const { texto, destaque }: Props = Astro.props;
+const corte = destaque ? texto.indexOf(destaque) : -1;
+const antes = corte >= 0 ? texto.slice(0, corte) : texto;
+const depois = corte >= 0 ? texto.slice(corte + destaque!.length) : "";
+---
+
+{antes}{corte >= 0 && <em class="titulo-destaque">{destaque}</em>}{depois}

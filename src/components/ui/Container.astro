@@ -1,0 +1,20 @@
+---
+/**
+ * Medida da página. `lg` é a largura de trabalho (1080 px, como a referência);
+ * `md` e `sm` apertam blocos de leitura — oferta, garantia e FAQ.
+ */
+interface Props {
+  class?: string;
+  size?: "sm" | "md" | "lg";
+}
+const { class: className = "", size = "lg" } = Astro.props;
+const sizes = {
+  sm: "max-w-[44rem]",
+  md: "max-w-[58rem]",
+  lg: "max-w-[67.5rem]",
+};
+---
+
+<div class:list={["relative z-2 mx-auto w-full px-4 sm:px-6", sizes[size], className]}>
+  <slot />
+</div>

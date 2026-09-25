@@ -1,0 +1,47 @@
+---
+import Container from "./Container.astro";
+
+/**
+ * Uma seção da página. O campo é sempre escuro — o ritmo vem da
+ * profundidade (`fundo` e `fundo-2` alternando) e do halo âmbar (`brilho`),
+ * reservado às seções que pedem a conversa.
+ */
+interface Props {
+  id?: string;
+  tone?: "fundo" | "fundo-2" | "brilho";
+  filetes?: boolean;
+  class?: string;
+  containerClass?: string;
+  size?: "sm" | "md" | "lg";
+}
+const {
+  id,
+  tone = "fundo",
+  filetes = false,
+  class: className = "",
+  containerClass = "",
+  size = "lg",
+} = Astro.props;
+
+const tons = {
+  fundo: "bg-fundo",
+  "fundo-2": "bg-fundo-2",
+  brilho:
+    "bg-fundo-2 before:absolute before:inset-x-0 before:top-0 before:h-96 before:bg-[radial-gradient(80%_100%_at_50%_0%,rgb(246_162_0/0.1),transparent_65%)] before:content-['']",
+};
+---
+
+<section
+  id={id}
+  class:list={[
+    "relative overflow-hidden py-20 text-creme sm:py-28",
+    tons[tone],
+    filetes && "border-y border-linha",
+    className,
+  ]}
+>
+  <slot name="fundo" />
+  <Container size={size} class={containerClass}>
+    <slot />
+  </Container>
+</section>

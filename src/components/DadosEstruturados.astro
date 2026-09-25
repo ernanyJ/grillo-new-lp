@@ -1,0 +1,63 @@
+---
+import { site } from "@/config/site";
+import { withBase } from "@/config/base";
+import { duvidas, fundador, solucoes } from "@/data/landing";
+
+/** JSON-LD: Organization (com os serviços), Person (fundador), WebSite e FAQPage. */
+const url = site.domain;
+const idOrg = `${url}/#grillo`;
+const idFundador = `${url}/#fundador`;
+
+const graph = [
+  {
+    "@type": "WebSite",
+    "@id": `${url}/#website`,
+    url: `${url}/`,
+    name: site.name,
+    inLanguage: site.locale,
+    publisher: { "@id": idOrg },
+  },
+  {
+    "@type": "ProfessionalService",
+    "@id": idOrg,
+    name: site.name,
+    description: site.description,
+    url: `${url}/`,
+    logo: new URL(withBase("/icon-512.png"), url).toString(),
+    image: new URL(site.ogImage, url).toString(),
+    email: site.contact.email,
+    telephone: `+${site.whatsapp.numero}`,
+    sameAs: site.social.map((s) => s.href),
+    founder: { "@id": idFundador },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Soluções",
+      itemListElement: solucoes.items.map((s) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: s.nome, description: s.paragrafo },
+      })),
+    },
+  },
+  {
+    "@type": "Person",
+    "@id": idFundador,
+    name: site.founder,
+    jobTitle: "Fundador",
+    description: fundador.paragrafos[0],
+    worksFor: { "@id": idOrg },
+  },
+  {
+    "@type": "FAQPage",
+    "@id": `${url}/#faq`,
+    mainEntity: duvidas.items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  },
+];
+
+const json = JSON.stringify({ "@context": "https://schema.org", "@graph": graph });
+---
+
+<script type="application/ld+json" set:html={json} />

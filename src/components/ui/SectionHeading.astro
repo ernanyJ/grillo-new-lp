@@ -1,0 +1,65 @@
+---
+import Pilula from "@/components/ui/Pilula.astro";
+import Destaque from "@/components/ui/Destaque.astro";
+
+/**
+ * Abertura de seção: pílula, título em Bebas que sobe palavra por palavra
+ * (`data-palavras`) e apoio curto.
+ */
+interface Props {
+  rotulo?: string;
+  title: string;
+  destaque?: string;
+  subtitle?: string;
+  align?: "left" | "center";
+  as?: "h2" | "h3";
+  class?: string;
+}
+const {
+  rotulo,
+  title,
+  destaque,
+  subtitle,
+  align = "center",
+  as: Tag = "h2",
+  class: className = "",
+}: Props = Astro.props;
+
+const centro = align === "center";
+---
+
+<header class:list={["flex flex-col", centro && "items-center text-center", className]}>
+  {
+    rotulo && (
+      <div data-reveal="escala" class="mb-6">
+        <Pilula>{rotulo}</Pilula>
+      </div>
+    )
+  }
+
+  <Tag
+    data-reveal
+    data-palavras
+    class:list={[
+      "titulo text-[2.5rem] text-creme sm:text-[3.4rem] lg:text-[4.25rem]",
+      centro ? "max-w-[20ch]" : "max-w-[18ch]",
+    ]}
+  >
+    <Destaque texto={title} destaque={destaque} />
+  </Tag>
+
+  {
+    subtitle && (
+      <p
+        data-reveal
+        style="--atraso: 200ms"
+        class:list={[
+          "mt-6 texto text-pretty text-fosco sm:text-lg",
+          centro && "mx-auto max-w-[58ch] text-center",
+        ]}
+      >
+        {subtitle}
+      </p>
+    )
+  }
+</header>

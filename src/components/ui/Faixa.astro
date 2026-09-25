@@ -1,0 +1,44 @@
+---
+/**
+ * Faixa infinita. O conteúdo vem duas vezes: a segunda cópia é
+ * `aria-hidden`, para o leitor de tela ouvir a lista uma vez só. Com
+ * redução de movimento, vira uma lista quebrada em linhas.
+ */
+interface Props {
+  items: readonly string[];
+  reverso?: boolean;
+  duracao?: number;
+  class?: string;
+  itemClass?: string;
+  rotulo?: string;
+}
+const {
+  items,
+  reverso = false,
+  duracao = 50,
+  class: className = "",
+  itemClass = "",
+  rotulo,
+}: Props = Astro.props;
+---
+
+<div class:list={["faixa min-w-0 overflow-hidden", className]}>
+  <div class:list={["faixa-trilho", reverso && "reverso"]} style={`--dur: ${duracao}s`}>
+    {
+      [0, 1].map((copia) => (
+        <ul
+          class="flex shrink-0 items-center gap-3 pr-3"
+          aria-hidden={copia === 1 ? "true" : undefined}
+          aria-label={copia === 0 ? rotulo : undefined}
+        >
+          {items.map((item) => (
+            <li class={itemClass}>
+              <span aria-hidden="true" class="mr-3 inline-block size-1.5 rotate-45 bg-ambar align-middle" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</div>

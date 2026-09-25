@@ -1,0 +1,71 @@
+---
+import LogoGrillo from "@/components/ui/LogoGrillo.astro";
+
+/**
+ * O signo da página: o símbolo da Grillo no centro, um anel de texto
+ * girando em volta, anéis tracejados em sentidos opostos e satélites
+ * (`orbitas`) percorrendo o círculo sempre de pé.
+ *
+ * Decorativo por inteiro — o texto do anel repete o descritor, que já está
+ * escrito no hero. Tudo aqui é `aria-hidden`.
+ */
+interface Props {
+  anel: string;
+  orbitas?: readonly string[];
+  class?: string;
+}
+const { anel, orbitas = [], class: className = "" }: Props = Astro.props;
+const id = `anel-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div aria-hidden="true" class:list={["relative aspect-square select-none [container-type:inline-size]", className]}>
+  <!-- Halo -->
+  <div
+    class="absolute inset-[18%] rounded-full bg-[radial-gradient(circle,rgb(246_162_0/0.28),rgb(78_150_150/0.12)_45%,transparent_70%)] blur-2xl deriva"
+    style="--dur: 14s"
+  >
+  </div>
+
+  <!-- Anéis tracejados em sentidos opostos -->
+  <svg class="absolute inset-0 size-full girar" style="--dur: 90s" viewBox="0 0 400 400" fill="none">
+    <circle cx="200" cy="200" r="196" stroke="rgb(147 191 191 / 0.22)" stroke-dasharray="2 10" />
+    <circle cx="200" cy="4" r="3.5" fill="var(--color-teal-claro)" />
+  </svg>
+  <svg class="absolute inset-[9%] size-[82%] girar-reverso" style="--dur: 60s" viewBox="0 0 400 400" fill="none">
+    <circle cx="200" cy="200" r="198" stroke="rgb(246 162 0 / 0.3)" stroke-dasharray="80 18 4 18" />
+    <circle cx="398" cy="200" r="4" fill="var(--color-ambar)" />
+  </svg>
+
+  <!-- Anel de texto -->
+  <svg class="absolute inset-[19%] size-[62%] girar" style="--dur: 32s" viewBox="0 0 300 300">
+    <defs>
+      <path id={id} d="M150,150 m-128,0 a128,128 0 1,1 256,0 a128,128 0 1,1 -256,0" />
+    </defs>
+    <text
+      class="fill-creme-2"
+      style="font-family: var(--font-texto); font-size: 15.5px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;"
+    >
+      <textPath href={`#${id}`} textLength="800">{anel}</textPath>
+    </text>
+  </svg>
+
+  <!-- Núcleo -->
+  <div class="absolute inset-[33%] grid place-items-center rounded-full border border-ambar-fundo/40 bg-[radial-gradient(circle_at_30%_25%,var(--color-floresta),var(--color-fundo)_75%)] shadow-alta">
+    <LogoGrillo versao="simbolo" class="h-[46%] text-ambar flutuar" />
+  </div>
+
+  <!-- Satélites -->
+  {
+    orbitas.length > 0 && (
+      <div class="orbita absolute inset-0" style="--dur: 70s">
+        {orbitas.map((item, i) => (
+          <div class="satelite" style={`--a: ${(360 / orbitas.length) * i}deg; --r: 50cqw`}>
+            <span class="-translate-x-1/2 -translate-y-1/2 inline-block whitespace-nowrap rounded-full border border-linha-2 bg-card-2/90 px-3 py-1.5 rotulo text-[0.6rem] text-creme-2 shadow-media backdrop-blur">
+              {item}
+            </span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+</div>

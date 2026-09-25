@@ -1,0 +1,113 @@
+---
+import Section from "@/components/ui/Section.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Button from "@/components/ui/Button.astro";
+import Destaque from "@/components/ui/Destaque.astro";
+import Faixa from "@/components/ui/Faixa.astro";
+import Icone from "@/components/ui/Icone.astro";
+import { metodo, cta } from "@/data/landing";
+
+/**
+ * Método em linha do tempo: a linha âmbar se desenha conforme a rolagem
+ * (`data-linha-progresso`) e cada marcador acende e gira quando a etapa
+ * entra. No desktop as etapas alternam de lado.
+ *
+ * Depois, a "Experiência Grillo": o fluxo correndo em faixa e os três zeros.
+ */
+const exp = metodo.experiencia;
+---
+
+<Section id="metodo" tone="fundo-2" filetes>
+  <SectionHeading
+    rotulo={metodo.rotulo}
+    title={metodo.title}
+    destaque={metodo.destaque}
+    subtitle={metodo.subtitle}
+  />
+
+  <ol class="relative mx-auto mt-16 max-w-4xl">
+    <!-- Trilho e linha que se desenha -->
+    <span aria-hidden="true" class="absolute top-0 bottom-0 left-6 w-px bg-linha-2 md:left-1/2"></span>
+    <span
+      aria-hidden="true"
+      data-linha-progresso
+      class="linha-progresso absolute top-0 bottom-0 left-6 w-0.5 -translate-x-[0.5px] bg-linear-to-b from-teal via-ambar to-ambar-claro md:left-1/2"
+    ></span>
+
+    {
+      metodo.etapas.map((e, i) => {
+        const direita = i % 2 === 1;
+        return (
+          <li
+            data-reveal={direita ? "direita" : "esquerda"}
+            class:list={[
+              "etapa relative grid grid-cols-[3rem_1fr] gap-5 pb-8 last:pb-0 md:grid-cols-[1fr_3rem_1fr] md:gap-8 md:pb-0 md:not-first:-mt-14",
+            ]}
+          >
+            <div
+              class:list={[
+                "col-start-2 md:row-start-1",
+                direita ? "md:col-start-3" : "md:col-start-1 md:text-right",
+              ]}
+            >
+              <div class="holofote rounded-caixa border border-linha bg-card p-6 transition-colors duration-500 hover:border-ambar-fundo/60">
+                <p class="rotulo text-ambar">Etapa {String(i + 1).padStart(2, "0")}</p>
+                <h3 class="mt-2 titulo text-[1.8rem] text-creme">{e.title}</h3>
+                <p class="mt-2 font-texto text-[0.9375rem] leading-relaxed text-fosco">{e.text}</p>
+              </div>
+            </div>
+            <span
+              aria-hidden="true"
+              class="marcador relative z-1 col-start-1 row-start-1 mt-5 grid size-12 place-items-center rounded-full border border-linha-2 bg-fundo-2 numero text-xl text-fosco md:col-start-2"
+            >
+              {i + 1}
+            </span>
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  <!-- Experiência Grillo -->
+  <div
+    data-reveal="escala"
+    class="relative mt-24 overflow-hidden rounded-bloco border border-ambar-fundo/50 bg-linear-[160deg,var(--color-card-2),var(--color-fundo)] px-6 py-12 text-center shadow-alta sm:px-12 sm:py-16"
+  >
+    <svg aria-hidden="true" class="absolute -bottom-40 -left-40 size-96 girar" style="--dur: 60s" viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="98" stroke="rgb(246 162 0 / 0.2)" stroke-dasharray="6 6" />
+      <circle cx="100" cy="100" r="70" stroke="rgb(147 191 191 / 0.18)" stroke-dasharray="30 10" />
+    </svg>
+    <p class="relative rotulo text-ambar">{exp.rotulo}</p>
+    <h3 data-reveal data-palavras class="relative mx-auto mt-4 max-w-[18ch] titulo text-[2.4rem] text-creme sm:text-[3.4rem]">
+      <Destaque texto={exp.title} destaque={exp.destaque} />
+    </h3>
+    <p class="relative mx-auto mt-5 max-w-[56ch] texto text-fosco">{exp.paragrafo}</p>
+
+    <Faixa
+      items={exp.fluxo}
+      duracao={30}
+      rotulo="Fluxo da experiência Grillo"
+      class="relative -mx-6 mt-10 sm:-mx-12"
+      itemClass="titulo text-[1.6rem] text-creme-2 whitespace-nowrap pr-6"
+    />
+
+    <ul class="relative mt-10 flex flex-wrap justify-center gap-3">
+      {
+        exp.zeros.map((z, i) => (
+          <li
+            data-reveal="girar"
+            style={`--i: ${i}`}
+            class="inline-flex items-center gap-2.5 rounded-full border border-ambar-fundo/60 bg-ambar/10 px-5 py-3 font-texto text-sm font-bold text-ambar-claro"
+          >
+            <Icone name="escudo" class="size-4" />
+            {z}
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="relative mt-10 flex justify-center">
+      <Button posicao="metodo">{cta.diagnostico}</Button>
+    </div>
+  </div>
+</Section>

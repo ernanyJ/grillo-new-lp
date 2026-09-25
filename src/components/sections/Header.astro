@@ -1,0 +1,48 @@
+---
+import Container from "@/components/ui/Container.astro";
+import Button from "@/components/ui/Button.astro";
+import LogoGrillo from "@/components/ui/LogoGrillo.astro";
+import { cta, nav } from "@/data/landing";
+
+/**
+ * Cabeçalho fixo e translúcido: marca, navegação por âncora (desktop) e o
+ * CTA do WhatsApp. A linha âmbar embaixo é o progresso de leitura.
+ */
+---
+
+<header class="sticky top-0 z-40 border-b border-linha/80 bg-fundo/75 backdrop-blur-xl">
+  <Container class="flex min-h-16 items-center justify-between gap-6 py-2">
+    <a href="#topo" class="group flex items-center gap-2.5" aria-label="Grillo — início">
+      <LogoGrillo
+        versao="simbolo"
+        class="h-6 text-ambar transition-transform duration-700 ease-mola group-hover:rotate-[360deg]"
+      />
+      <LogoGrillo versao="completa" class="hidden w-[92px] text-creme sm:inline-flex [&_svg]:h-auto" />
+    </a>
+
+    <nav aria-label="Seções" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="relative rounded-full px-4 py-2 font-texto text-sm font-semibold text-creme-2 transition-colors after:absolute after:inset-x-4 after:bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-ambar after:transition-transform after:duration-300 hover:text-creme hover:after:scale-x-100"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <Button posicao="header" size="compacto" class="w-auto! shrink-0">
+      <span class="hidden sm:inline">{cta.falar}</span><span class="sm:hidden">{cta.whatsapp}</span>
+    </Button>
+  </Container>
+
+  <div aria-hidden="true" class="absolute inset-x-0 -bottom-px h-0.5 overflow-hidden">
+    <div class="progresso-leitura h-full bg-linear-to-r from-teal via-ambar to-ambar-claro"></div>
+  </div>
+</header>
