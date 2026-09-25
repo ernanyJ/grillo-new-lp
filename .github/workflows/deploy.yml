@@ -25,7 +25,7 @@ jobs:
         # Preview only: sai com noindex e canonical para o endereço definitivo.
         env:
           SITE_URL: https://ernanyj.github.io
-          BASE_PATH: /grillo-lp
+          BASE_PATH: /grillo-new-lp
 
   deploy:
     needs: build

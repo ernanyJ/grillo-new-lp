@@ -11,6 +11,6 @@ pnpm build    # saída em dist/
 ## Deploy
 
 Push em `main` publica o preview no GitHub Pages
-(`.github/workflows/deploy.yml`) em https://ernanyj.github.io/grillo-lp/,
+(`.github/workflows/deploy.yml`) em https://ernanyj.github.io/grillo-new-lp/,
 com `noindex` e canonical para hubgrillo.com. Se o repositório tiver outro
 nome, troque `BASE_PATH` no workflow.
